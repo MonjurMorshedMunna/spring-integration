@@ -9,14 +9,15 @@
 
   <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
   <integration:channel id="inputChannel">
-    <integration:priority-queue capacity="10" comparator="customComparator"/>
+    <integration:dispatcher failover="false" load-balancer="round-robin"/>
   </integration:channel>
 
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
+  <bean class="com.oreilly.integration.UppercasePrintService" id="uppercasePrintService"/>
 
-  <integration:service-activator ref="printService" method="print"
-                                 input-channel="inputChannel">
-    <integration:poller fixed-rate="10" time-unit="SECONDS" max-messages-per-poll="2"></integration:poller>
-  </integration:service-activator>
+
+  <integration:service-activator order="2" ref="uppercasePrintService" method="print" input-channel="inputChannel"/>
+  <integration:service-activator order="1" ref="printService" method="print" input-channel="inputChannel"/>
+
 
 </beans>

@@ -9,7 +9,7 @@
 
   <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
   <integration:channel id="inputChannel">
-    <integration:dispatcher failover="false" load-balancer="round-robin"/>
+    <integration:dispatcher  load-balancer="round-robin"/>
   </integration:channel>
 
   <bean class="com.oreilly.integration.PrintService" id="printService"/>

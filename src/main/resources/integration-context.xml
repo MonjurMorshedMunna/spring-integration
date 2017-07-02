@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+  <integration:gateway service-interface="com.oreilly.integration.PrinterGateway"
+                       default-request-channel="inputChannel"></integration:gateway>
+
+  <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
+  <integration:channel id="inputChannel">
+    <integration:priority-queue capacity="10" comparator="customComparator"/>
+  </integration:channel>
+
+  <bean class="com.oreilly.integration.PrintService" id="printService"/>
+
+  <integration:service-activator ref="printService" method="print"
+                                 input-channel="inputChannel">
+    <integration:poller fixed-rate="10" time-unit="SECONDS" max-messages-per-poll="2"></integration:poller>
+  </integration:service-activator>
+
+</beans>

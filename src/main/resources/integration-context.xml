@@ -7,10 +7,10 @@
   <integration:gateway service-interface="com.oreilly.integration.PrinterGateway"
                        default-request-channel="inputChannel"></integration:gateway>
 
-  <integration:payload-type-router input-channel="inputChannel" >
-    <integration:mapping type="java.lang.Integer" channel="intChannel"/>
-    <integration:mapping type="java.lang.String" channel="stringChannel"/>
-  </integration:payload-type-router>
+
+  <integration:header-value-router input-channel="inputChannel" header-name="routeHeader">
+  </integration:header-value-router>
+
 
   <integration:channel id="inputChannel">
   </integration:channel>

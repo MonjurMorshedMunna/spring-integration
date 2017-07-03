@@ -8,10 +8,10 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
 
-  <integration:header-value-router input-channel="inputChannel" header-name="routeHeader">
-    <integration:mapping value="int" channel="intChannel"/>
-    <integration:mapping value="string" channel="stringChannel"/>
-  </integration:header-value-router>
+  <integration:recipient-list-router input-channel="inputChannel">
+    <integration:recipient channel="intChannel"/>
+    <integration:recipient channel="stringChannel"/>
+  </integration:recipient-list-router>
 
 
   <integration:channel id="inputChannel">

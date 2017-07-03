@@ -2,41 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
   <integration:gateway service-interface="com.oreilly.integration.PrinterGateway"
-                       default-request-channel="pollableChannel"></integration:gateway>
+                       default-request-channel="inputChannel"></integration:gateway>
 
-  <bean id="interceptor" class="com.oreilly.integration.CustomChannelInterceptor"/>
-  <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
+  <integration:payload-type-router input-channel="inputChannel" >
+    <integration:mapping type="java.lang.Integer" channel="intChannel"/>
+    <integration:mapping type="java.lang.String" channel="stringChannel"/>
+  </integration:payload-type-router>
 
-  <integration:channel id="pollableChannel">
-    <integration:queue capacity="10"/>
-    <integration:interceptors>
-      <integration:ref bean="interceptor"/>
-    </integration:interceptors>
+  <integration:channel id="inputChannel">
   </integration:channel>
 
-
-  <integration:bridge input-channel="pollableChannel" output-channel="inputChannel">
-    <integration:poller fixed-delay="5" time-unit="SECONDS" max-messages-per-poll="2">
-    </integration:poller>
-  </integration:bridge>
-
-  <integration:publish-subscribe-channel id="inputChannel"
-                                         task-executor="executor"></integration:publish-subscribe-channel>
-  <task:executor id="executor" pool-size="5"/> <!--pool-size defines, how many threads we want to use-->
-  <!--<integration:channel id="inputChannel">
-    <integration:dispatcher load-balancer="round-robin"/>
-  </integration:channel>-->
-
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
-  <bean class="com.oreilly.integration.UppercasePrintService" id="uppercasePrintService"/>
+  <bean class="com.oreilly.integration.NumericPrintService" id="numericPrintService"/>
 
-
-  <integration:service-activator order="2" ref="uppercasePrintService" method="print" input-channel="inputChannel"/>
-  <integration:service-activator order="1" ref="printService" method="print" input-channel="inputChannel"/>
+  <integration:service-activator ref="numericPrintService" method="print" input-channel="intChannel"/>
+  <integration:service-activator ref="printService" method="print" input-channel="stringChannel"/>
 
 
 </beans>

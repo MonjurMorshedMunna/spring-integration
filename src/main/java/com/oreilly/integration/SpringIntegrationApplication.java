@@ -26,7 +26,7 @@ public class SpringIntegrationApplication implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
     for (int x = 0; x < 10; x++) {
-      Message<String> message = MessageBuilder.withPayload("Printing message for payload for " + x).setHeader("messageNumber", x).build();
+      Message<?> message = MessageBuilder.withPayload(x).build();
       this.gateway.print(message);
     }
 

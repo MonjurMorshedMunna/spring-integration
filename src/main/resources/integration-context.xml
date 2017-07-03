@@ -8,18 +8,22 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
 
-  <integration:recipient-list-router input-channel="inputChannel">
-    <integration:recipient selector-expression="payload.equals(5)" channel="intChannel"/>
-    <integration:recipient channel="stringChannel"/>
+  <integration:recipient-list-router input-channel="inputChannel" default-output-channel="defaultChannel">
+    <integration:recipient selector-expression="payload.equals(51)" channel="intChannel"/>
+    <integration:recipient selector-expression="payload.equals(51)" channel="stringChannel"/>
   </integration:recipient-list-router>
 
 
   <integration:channel id="inputChannel">
   </integration:channel>
 
+  <integration:channel id="defaultChannel"/>
+
+  <bean class="com.oreilly.integration.DefaultService" id="defaultService"/>
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
   <bean class="com.oreilly.integration.NumericPrintService" id="numericPrintService"/>
 
+  <integration:service-activator ref="defaultService" method="print" input-channel="defaultChannel"/>
   <integration:service-activator ref="numericPrintService" method="print" input-channel="intChannel"/>
   <integration:service-activator ref="printService" method="print" input-channel="stringChannel"/>
 

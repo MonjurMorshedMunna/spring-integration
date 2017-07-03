@@ -11,7 +11,7 @@
   <bean class="com.oreilly.integration.CustomSplitter" id="customSplitter"/>
   <integration:splitter ref="customSplitter" method="splitMessage" input-channel="inputChannel"
                         output-channel="agChannel"/>
-  <integration:aggregator input-channel="agChannel" output-channel="outputChannel">
+  <integration:aggregator ref="customAggregator" input-channel="agChannel" output-channel="outputChannel">
 
   </integration:aggregator>
   <integration:channel id="inputChannel"/>
@@ -19,8 +19,8 @@
   <integration:channel id="agChannel"/>
 
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
+  <bean class="com.oreilly.integration.CustomAggregator" id="customAggregator"/>
 
   <integration:service-activator ref="printService" method="print" input-channel="outputChannel"/>
-
 
 </beans>

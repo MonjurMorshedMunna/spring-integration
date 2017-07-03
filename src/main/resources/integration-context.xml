@@ -8,10 +8,8 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
 
-  <integration:recipient-list-router input-channel="inputChannel" default-output-channel="defaultChannel">
-    <integration:recipient selector-expression="payload.equals(51)" channel="intChannel"/>
-    <integration:recipient selector-expression="payload.equals(51)" channel="stringChannel"/>
-  </integration:recipient-list-router>
+  <bean id="customRouter" class="com.oreilly.integration.CustomRouter"/>
+  <integration:router ref="customRouter" input-channel="inputChannel"/>
 
 
   <integration:channel id="inputChannel">

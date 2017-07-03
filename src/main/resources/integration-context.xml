@@ -8,9 +8,11 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
   <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
-  <integration:channel id="inputChannel">
-    <integration:dispatcher  load-balancer="round-robin"/>
-  </integration:channel>
+
+  <integration:publish-subscribe-channel id="inputChannel"></integration:publish-subscribe-channel>
+  <!--<integration:channel id="inputChannel">
+    <integration:dispatcher load-balancer="round-robin"/>
+  </integration:channel>-->
 
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
   <bean class="com.oreilly.integration.UppercasePrintService" id="uppercasePrintService"/>

@@ -13,8 +13,8 @@ public class PrintService {
       System.out.println(entry.getKey());
       System.out.println(entry.getValue());
     }*/
-    throw new RuntimeException("This is an error");
-//    System.out.println(pMessage.getPayload());
+
+    System.out.println(pMessage.getPayload());
   }
 
 }

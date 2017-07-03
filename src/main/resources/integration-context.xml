@@ -8,13 +8,11 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
 
-  <bean class="com.oreilly.integration.CustomFilter" id="customFilter"/>
-
+  <bean class="com.oreilly.integration.CustomSplitter" id="customSplitter"/>
+  <integration:splitter ref="customSplitter" input-channel="inputChannel" output-channel="outputChannel"/>
   <integration:channel id="inputChannel"/>
   <integration:channel id="outputChannel"/>
-
-  <integration:filter ref="customFilter" input-channel="inputChannel" output-channel="outputChannel"/>
-
+  
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
 
   <integration:service-activator ref="printService" method="print" input-channel="outputChannel"/>

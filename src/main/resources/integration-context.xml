@@ -8,10 +8,14 @@
   <integration:gateway service-interface="com.oreilly.integration.PrinterGateway"
                        default-request-channel="pollableChannel"></integration:gateway>
 
+  <bean id="interceptor" class="com.oreilly.integration.CustomChannelInterceptor"/>
   <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
 
   <integration:channel id="pollableChannel">
     <integration:queue capacity="10"/>
+    <integration:interceptors>
+      <integration:ref bean="interceptor"/>
+    </integration:interceptors>
   </integration:channel>
 
 

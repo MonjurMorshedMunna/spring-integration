@@ -8,10 +8,12 @@
                        default-request-channel="inputChannel"></integration:gateway>
 
 
+  <bean class="com.oreilly.integration.CustomFilter" id="customFilter"/>
+
   <integration:channel id="inputChannel"/>
   <integration:channel id="outputChannel"/>
 
-  <integration:filter expression="payload.equals(4)" input-channel="inputChannel" output-channel="outputChannel"/>
+  <integration:filter ref="customFilter" input-channel="inputChannel" output-channel="outputChannel"/>
 
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
 

@@ -9,7 +9,7 @@
 
 
   <integration:recipient-list-router input-channel="inputChannel">
-    <integration:recipient channel="intChannel"/>
+    <integration:recipient selector-expression="payload.equals(5)" channel="intChannel"/>
     <integration:recipient channel="stringChannel"/>
   </integration:recipient-list-router>
 

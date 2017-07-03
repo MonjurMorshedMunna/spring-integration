@@ -7,7 +7,7 @@ import org.springframework.messaging.Message;
  */
 public class PrintService {
 
-  public void print(Message<String> pMessage) {/*
+  public void print(Message<?> pMessage) {/*
     MessageHeaders headers = pMessage.getHeaders();
     for (Map.Entry<String, Object> entry : headers.entrySet()) {
       System.out.println(entry.getKey());

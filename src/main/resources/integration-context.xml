@@ -9,6 +9,8 @@
 
 
   <integration:header-value-router input-channel="inputChannel" header-name="routeHeader">
+    <integration:mapping value="int" channel="intChannel"/>
+    <integration:mapping value="string" channel="stringChannel"/>
   </integration:header-value-router>
 
 

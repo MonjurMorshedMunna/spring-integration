@@ -2,14 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
   <integration:gateway service-interface="com.oreilly.integration.PrinterGateway"
                        default-request-channel="inputChannel"></integration:gateway>
 
   <bean id="customComparator" class="com.oreilly.integration.CustomMessageComparator"/>
 
-  <integration:publish-subscribe-channel id="inputChannel"></integration:publish-subscribe-channel>
+  <integration:publish-subscribe-channel id="inputChannel"
+                                         task-executor="executor"></integration:publish-subscribe-channel>
+  <task:executor id="executor" pool-size="5"/> <!--pool-size defines, how many threads we want to use-->
   <!--<integration:channel id="inputChannel">
     <integration:dispatcher load-balancer="round-robin"/>
   </integration:channel>-->

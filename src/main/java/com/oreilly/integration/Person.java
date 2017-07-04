@@ -8,9 +8,19 @@ public class Person {
 
   private String lastName;
 
+  private String phoneNumber;
+
   public Person(String pFirstName, String pLastName) {
     firstName = pFirstName;
     lastName = pLastName;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String pPhoneNumber) {
+    phoneNumber = pPhoneNumber;
   }
 
   public String getFirstName() {
@@ -34,6 +44,7 @@ public class Person {
     return "Person{" +
         "firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
+        ", phoneNumber='" + phoneNumber + '\'' +
         '}';
   }
 }

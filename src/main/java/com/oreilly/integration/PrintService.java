@@ -9,13 +9,7 @@ import java.util.Map;
  */
 public class PrintService {
 
-  public void print(Message<?> pMessage) {/*
-    MessageHeaders headers = pMessage.getHeaders();
-    for (Map.Entry<String, Object> entry : headers.entrySet()) {
-      System.out.println(entry.getKey());
-      System.out.println(entry.getValue());
-    }*/
-
+  public void print(Message<?> pMessage) {
     System.out.println(pMessage.getPayload());
     for (Map.Entry<String, Object> entry : pMessage.getHeaders().entrySet()) {
       System.out.println(entry.getKey() + ": " + entry.getValue());

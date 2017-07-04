@@ -4,13 +4,13 @@
        xmlns:integration="http://www.springframework.org/schema/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-  <integration:gateway service-interface="com.oreilly.integration.EnhancedPrinterGateway">
-    <integration:default-header name="globalHeader" value="simpleValue"/>
-    <integration:method name="print" request-channel="printChannel">
-      <integration:header name="individualHeader" expression="#args[0].firstName"/>
-    </integration:method>
-    <integration:method name="uppercase" request-channel="uppercaseChannel"></integration:method>
-  </integration:gateway>
+
+  <integration:inbound-channel-adapter ref="personDirectoryService" method="findNewPeople" channel="printChannel">
+    <integration:poller fixed-rate="3000">
+
+    </integration:poller>
+  </integration:inbound-channel-adapter>
+  <bean id="personDirectoryService" class="com.oreilly.integration.PersonDirectoryService"/>
 
 
   <integration:channel id="printChannel"/>

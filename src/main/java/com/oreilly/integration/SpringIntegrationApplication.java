@@ -25,8 +25,8 @@ public class SpringIntegrationApplication implements ApplicationRunner {
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
     Person[] payloads = {new Person("Kevin", "Bowsersox"), new Person("Monjur", "Morshed"), new Person("Jane", "Doe'")};
     for (int x = 0; x < payloads.length; x++) {
-      String returnMessage = this.gateway.uppercase(payloads[x]);
-      System.out.println(returnMessage);
+      this.gateway.print(payloads[x]);
+//      System.out.println(returnMessage);
     }
 
   }

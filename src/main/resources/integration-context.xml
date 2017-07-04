@@ -5,7 +5,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
   <integration:gateway service-interface="com.oreilly.integration.EnhancedPrinterGateway">
-    <integration:method name="print" request-channel="printChannel"></integration:method>
+    <integration:default-header name="globalHeader" value="simpleValue"/>
+    <integration:method name="print" request-channel="printChannel">
+      <integration:header name="individualHeader" expression="#args[0].firstName"/>
+    </integration:method>
     <integration:method name="uppercase" request-channel="uppercaseChannel"></integration:method>
   </integration:gateway>
 

@@ -14,7 +14,7 @@
   <integration:channel id="enricherChannel"/>
 
   <integration:header-enricher input-channel="inputChannel" output-channel="enricherChannel">
-    <integration:header name="publicKey" value="54321"></integration:header>
+    <integration:header name="publicKey" ref="customHeaderEnricher" method="getHeaderValue"></integration:header>
   </integration:header-enricher>
   <integration:header-filter header-names="privateKey, someotherName" input-channel="enricherChannel"
                              output-channel="filterChannel"/>
@@ -22,6 +22,7 @@
   <integration:object-to-json-transformer input-channel="filterChannel"
                                           output-channel="outputChannel"></integration:object-to-json-transformer>
 
+  <bean class="com.oreilly.integration.CustomHeaderEnricher" id="customHeaderEnricher"/>
   <bean class="com.oreilly.integration.PrintService" id="printService"/>
 
   <integration:service-activator ref="printService" method="print" input-channel="outputChannel"/>

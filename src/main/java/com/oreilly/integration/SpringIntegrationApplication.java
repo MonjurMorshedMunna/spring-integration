@@ -7,8 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
 
 @SpringBootApplication
 @Configuration
@@ -16,7 +14,7 @@ import org.springframework.messaging.Message;
 public class SpringIntegrationApplication implements ApplicationRunner {
 
   @Autowired
-  private PrinterGateway gateway;
+  private EnhancedPrinterGateway gateway;
 
 
   public static void main(String[] args) {
@@ -27,8 +25,7 @@ public class SpringIntegrationApplication implements ApplicationRunner {
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
     Person[] payloads = {new Person("Kevin", "Bowsersox"), new Person("Monjur", "Morshed"), new Person("Jane", "Doe'")};
     for (int x = 0; x < payloads.length; x++) {
-      Message<?> message = MessageBuilder.withPayload(payloads[x]).setHeader("replyChannel", "outputChannel").build();
-      this.gateway.print(message);
+      this.gateway.print(payloads[x]);
     }
 
   }

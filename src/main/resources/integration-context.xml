@@ -2,23 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+       xmlns:int-file="http://www.springframework.org/schema/integration/file"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-4.3.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-
-  <integration:inbound-channel-adapter ref="personDirectoryService" method="findNewPeople" channel="registerChannel">
-    <integration:poller fixed-rate="3000">
-
+  <int-file:inbound-channel-adapter directory="file:src/test" filename-pattern="sample.txt" channel="inboundChannel">
+    <integration:poller fixed-rate="10000">
     </integration:poller>
-  </integration:inbound-channel-adapter>
-  <bean id="personDirectoryService" class="com.oreilly.integration.PersonDirectoryService"/>
-
-  <integration:outbound-channel-adapter ref="personRegistrationService" method="registerEmail"
-                                        channel="registerChannel">
-
-  </integration:outbound-channel-adapter>
-  <bean class="com.oreilly.integration.PersonRegistrationService" id="personRegistrationService"/>
-
-  <integration:channel id="registerChannel"/>
+  </int-file:inbound-channel-adapter>
+  <integration:channel id="inboundChannel"/>
 
 
+  <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
+  <integration:service-activator ref="filePrinter" input-channel="inboundChannel"/>
 </beans>

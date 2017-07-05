@@ -7,13 +7,17 @@
 		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-4.3.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
-  <int-file:inbound-channel-adapter directory="file:src/test" filename-pattern="sample.txt" channel="inboundChannel">
+  <int-file:inbound-channel-adapter directory="file:src/test/read" filename-pattern="sample.txt"
+                                    channel="inboundChannel">
     <integration:poller fixed-rate="10000">
     </integration:poller>
   </int-file:inbound-channel-adapter>
   <integration:channel id="inboundChannel"/>
 
 
-  <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
-  <integration:service-activator ref="filePrinter" input-channel="inboundChannel"/>
+  <int-file:outbound-channel-adapter directory="file:src/test/write" channel="inboundChannel"
+                                     auto-create-directory="true" mode="REPLACE" delete-source-files="true">
+
+  </int-file:outbound-channel-adapter>
+
 </beans>

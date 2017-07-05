@@ -12,12 +12,21 @@
     <integration:poller fixed-rate="10000">
     </integration:poller>
   </int-file:inbound-channel-adapter>
+
+
   <integration:channel id="inboundChannel"/>
+  <int-file:file-to-string-transformer input-channel="inboundChannel" output-channel="transformChannel"/>
+  <integration:channel id="transformChannel"/>
 
 
-  <int-file:outbound-channel-adapter directory="file:src/test/write" channel="inboundChannel"
+  <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
+
+  <integration:service-activator ref="filePrinter" method="print" input-channel="transformChannel"/>
+
+
+  <!--<int-file:outbound-channel-adapter directory="file:src/test/write" channel="inboundChannel"
                                      auto-create-directory="true" mode="REPLACE" delete-source-files="true">
 
-  </int-file:outbound-channel-adapter>
+  </int-file:outbound-channel-adapter>-->
 
 </beans>

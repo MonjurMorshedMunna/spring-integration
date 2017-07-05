@@ -9,6 +9,13 @@ import java.io.IOException;
  * Created by Monjur-E-Morshed on 05-Jul-17.
  */
 public class FilePrinter {
+
+
+  public void print(String file) {
+    System.out.println("Invoking the print method with a string");
+    System.out.println(file);
+  }
+
   public void print(File file) {
     BufferedReader reader = null;
 

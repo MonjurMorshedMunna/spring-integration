@@ -8,6 +8,7 @@ import org.springframework.messaging.Message;
 public class MessagePrinter {
 
   public void print(Message<?> pMessage) {
+    System.out.println("Printing the message:");
     System.out.println(pMessage);
   }
 }

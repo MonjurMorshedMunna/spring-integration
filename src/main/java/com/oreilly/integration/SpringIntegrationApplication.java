@@ -24,5 +24,6 @@ public class SpringIntegrationApplication implements ApplicationRunner {
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
     Person person = new Person(4, "Jane", "Doe");
     this.gateWay.save(person);
+    System.out.println("The message has been sent to JMS");
   }
 }

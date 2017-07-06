@@ -30,6 +30,11 @@
 
   <integration:object-to-string-transformer input-channel="inboundChannel" output-channel="outboundChannel"/>
 
+  <jms:inbound-channel-adapter connection-factory="connectionFactory" destination="queue" channel="jmsChannel">
+    <integration:poller fixed-rate="7000">
+    </integration:poller>
+  </jms:inbound-channel-adapter>
+
   <integration:gateway service-interface="com.oreilly.integration.PersonGateway"
                        default-request-channel="inboundChannel"></integration:gateway>
 

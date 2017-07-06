@@ -3,29 +3,40 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
        xmlns:int-file="http://www.springframework.org/schema/integration/file"
+       xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-4.3.xsd
-		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
 
-  <int-file:inbound-channel-adapter directory="file:src/test/read" filename-pattern="sample.txt"
-                                    channel="inboundChannel">
-    <integration:poller fixed-rate="10000">
+  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
+    <property name="host" value="localhost"/>
+    <property name="port" value="21"/>
+    <property name="username" value="iums"/>
+    <property name="password" value="austig100"/>
+  </bean>
+
+  <ftp:inbound-channel-adapter
+      session-factory="ftpClientFactory"
+      channel="ftpChannel"
+      local-directory="file:src/test/write"
+      remote-directory="files"
+      delete-remote-files="true">
+
+    <integration:poller fixed-rate="5000">
     </integration:poller>
-  </int-file:inbound-channel-adapter>
 
+  </ftp:inbound-channel-adapter>
 
   <integration:channel id="inboundChannel"/>
+  <integration:channel id="ftpChannel"/>
   <int-file:file-to-string-transformer input-channel="inboundChannel" output-channel="transformChannel"/>
   <integration:channel id="transformChannel"/>
   <integration:channel id="outboundChannel"/>
 
-  <int-file:outbound-gateway request-channel="transformChannel" reply-channel="outboundChannel"
-                             directory="file:src/test/write" auto-create-directory="true" mode="REPLACE"/>
-
 
   <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
 
-  <integration:service-activator ref="filePrinter" method="print" input-channel="outboundChannel"/>
+  <integration:service-activator ref="filePrinter" method="print" input-channel="ftpChannel"/>
 
 
   <!--<int-file:outbound-channel-adapter directory="file:src/test/write" channel="inboundChannel"

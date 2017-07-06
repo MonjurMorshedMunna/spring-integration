@@ -4,23 +4,25 @@ package com.oreilly.integration;
  * Created by Monjur-E-Morshed on 04-Jul-17.
  */
 public class Person {
+  private int id;
+
   private String firstName;
 
   private String lastName;
 
-  private String phoneNumber;
 
-  public Person(String pFirstName, String pLastName) {
+  public Person(int pId, String pFirstName, String pLastName) {
+    id = pId;
     firstName = pFirstName;
     lastName = pLastName;
   }
 
-  public String getPhoneNumber() {
-    return phoneNumber;
+  public int getId() {
+    return id;
   }
 
-  public void setPhoneNumber(String pPhoneNumber) {
-    phoneNumber = pPhoneNumber;
+  public void setId(int pId) {
+    id = pId;
   }
 
   public String getFirstName() {
@@ -39,12 +41,5 @@ public class Person {
     lastName = pLastName;
   }
 
-  @Override
-  public String toString() {
-    return "Person{" +
-        "firstName='" + firstName + '\'' +
-        ", lastName='" + lastName + '\'' +
-        ", phoneNumber='" + phoneNumber + '\'' +
-        '}';
-  }
+
 }

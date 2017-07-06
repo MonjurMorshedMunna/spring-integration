@@ -9,19 +9,24 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
+  <integration:gateway service-interface="com.oreilly.integration.PersonGateway"
+                       default-request-channel="inboundChannel"></integration:gateway>
+
+  <int-jdbc:outbound-channel-adapter channel="inboundChannel" data-source="datasource"
+                                     query="insert into person values(:payload.id, :payload.firstName, :payload.lastName)">
+
+  </int-jdbc:outbound-channel-adapter>
+
 
   <jdbc:embedded-database id="datasource" type="H2">
     <jdbc:script location="init.sql"/>
   </jdbc:embedded-database>
 
-  <int-jdbc:inbound-channel-adapter channel="jdbcChannel" query="select * from person" data-source="datasource">
-    <integration:poller fixed-rate="4000">
-    </integration:poller>
-  </int-jdbc:inbound-channel-adapter>
+
 
   <bean class="com.oreilly.integration.MessagePrinter" id="mp"/>
   <integration:service-activator ref="mp" method="print" input-channel="jdbcChannel"/>
   <integration:channel id="jdbcChannel"/>
-
+  <integration:channel id="inboundChannel"/>
 
 </beans>

@@ -23,5 +23,6 @@ public class SpringIntegrationApplication implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
     this.gateway.write("example.txt", "This is a test of the ftp outbound channel adapter");
+    this.gateway.read("files/example.txt");
   }
 }

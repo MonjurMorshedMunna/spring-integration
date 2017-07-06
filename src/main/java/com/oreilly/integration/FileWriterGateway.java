@@ -10,4 +10,6 @@ public interface FileWriterGateway {
 
   public void write(@Header("fileName") String fileName, @Payload String message);
 
+  public void read(String filename);
+
 }

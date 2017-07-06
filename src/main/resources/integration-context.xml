@@ -20,22 +20,7 @@
   </bean>
 
 
-  <ftp:outbound-channel-adapter session-factory="ftpClientFactory" channel="ftpChannel" remote-directory="files"
-                                remote-filename-generator-expression="headers['fileName']">
 
-  </ftp:outbound-channel-adapter>
-
-  <!-- <ftp:inbound-channel-adapter
-       session-factory="ftpClientFactory"
-       channel="ftpChannel"
-       local-directory="file:src/test/write"
-       remote-directory="files"
-       delete-remote-files="true">
-
-     <integration:poller fixed-rate="5000">
-     </integration:poller>
-
-   </ftp:inbound-channel-adapter>-->
 
   <integration:channel id="inboundChannel"/>
   <integration:channel id="ftpChannel"/>
@@ -44,14 +29,23 @@
   <integration:channel id="outboundChannel"/>
 
 
+  <ftp:outbound-gateway
+      session-factory="ftpClientFactory"
+      command="get" expression="payload" request-channel="ftpChannel" local-directory="src/test/write"
+      reply-channel="outboundChannel">
+
+  </ftp:outbound-gateway>
+
+
+  <int-file:file-to-string-transformer input-channel="outboundChannel" output-channel="transformChannel"/>
+
+  <bean class="com.oreilly.integration.MessagePrinter" id="mp"/>
+  <integration:service-activator ref="mp" method="print" input-channel="transformChannel"/>
+
   <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
 
   <integration:service-activator ref="filePrinter" method="print" input-channel="ftpChannel"/>
 
 
-  <!--<int-file:outbound-channel-adapter directory="file:src/test/write" channel="inboundChannel"
-                                     auto-create-directory="true" mode="REPLACE" delete-source-files="true">
-
-  </int-file:outbound-channel-adapter>-->
 
 </beans>

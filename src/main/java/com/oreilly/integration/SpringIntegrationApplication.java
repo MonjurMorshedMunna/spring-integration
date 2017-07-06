@@ -1,5 +1,6 @@
 package com.oreilly.integration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("integration-context.xml")
 public class SpringIntegrationApplication implements ApplicationRunner {
 
+  @Autowired
+  private FileWriterGateway gateway;
 
   public static void main(String[] args) {
     SpringApplication.run(SpringIntegrationApplication.class, args);
@@ -19,6 +22,6 @@ public class SpringIntegrationApplication implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments pApplicationArguments) throws Exception {
-
+    this.gateway.write("example.txt", "This is a test of the ftp outbound channel adapter");
   }
 }

@@ -3,19 +3,25 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/integration/jdbc http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-
-
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
 
-  <jdbc:embedded-database id="dataSource" type="H2">
+  <jdbc:embedded-database id="datasource" type="H2">
     <jdbc:script location="init.sql"/>
   </jdbc:embedded-database>
 
+  <int-jdbc:inbound-channel-adapter channel="jdbcChannel" query="select * from person" data-source="datasource">
+    <integration:poller fixed-rate="4000">
+    </integration:poller>
+  </int-jdbc:inbound-channel-adapter>
+
   <bean class="com.oreilly.integration.MessagePrinter" id="mp"/>
-  <integration:service-activator ref="mp" method="print" input-channel="transformChannel"/>
+  <integration:service-activator ref="mp" method="print" input-channel="jdbcChannel"/>
   <integration:channel id="jdbcChannel"/>
+
 
 </beans>

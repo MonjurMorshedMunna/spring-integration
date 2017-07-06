@@ -5,3 +5,5 @@ create table person(
 );
 
 insert into person values(1,'Monjur', 'Morshed');
+insert into person values(2,'Marium', 'Shorna');
+

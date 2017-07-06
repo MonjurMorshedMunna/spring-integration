@@ -2,50 +2,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:integration="http://www.springframework.org/schema/integration"
-       xmlns:int-file="http://www.springframework.org/schema/integration/file"
-       xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-4.3.xsd
-		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 
 
-  <integration:gateway service-interface="com.oreilly.integration.FileWriterGateway"
-                       default-request-channel="ftpChannel"></integration:gateway>
-
-  <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpClientFactory">
-    <property name="host" value="localhost"/>
-    <property name="port" value="21"/>
-    <property name="username" value="iums"/>
-    <property name="password" value="austig100"/>
-  </bean>
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
 
-
-
-  <integration:channel id="inboundChannel"/>
-  <integration:channel id="ftpChannel"/>
-  <int-file:file-to-string-transformer input-channel="inboundChannel" output-channel="transformChannel"/>
-  <integration:channel id="transformChannel"/>
-  <integration:channel id="outboundChannel"/>
-
-
-  <ftp:outbound-gateway
-      session-factory="ftpClientFactory"
-      command="get" expression="payload" request-channel="ftpChannel" local-directory="src/test/write"
-      reply-channel="outboundChannel">
-
-  </ftp:outbound-gateway>
-
-
-  <int-file:file-to-string-transformer input-channel="outboundChannel" output-channel="transformChannel"/>
+  <jdbc:embedded-database id="dataSource" type="H2">
+    <jdbc:script location="init.sql"/>
+  </jdbc:embedded-database>
 
   <bean class="com.oreilly.integration.MessagePrinter" id="mp"/>
   <integration:service-activator ref="mp" method="print" input-channel="transformChannel"/>
-
-  <bean class="com.oreilly.integration.FilePrinter" id="filePrinter"/>
-
-  <integration:service-activator ref="filePrinter" method="print" input-channel="ftpChannel"/>
-
-
+  <integration:channel id="jdbcChannel"/>
 
 </beans>
